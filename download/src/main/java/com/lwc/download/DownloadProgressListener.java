@@ -44,7 +44,9 @@ public class DownloadProgressListener {
                             listener.onFinishDownload();
                             info.setState(DownState.FINISH);
                         } else {
-                            listener.onProgress((int) (info.getReadLength() * 100 / info.getContentLength()));
+                            if (info.getContentLength() > 0) {
+                                listener.onProgress((int) (info.getReadLength() * 100 / info.getContentLength()));
+                            }
                         }
                     }
                 });

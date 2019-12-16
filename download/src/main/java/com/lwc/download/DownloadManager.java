@@ -115,9 +115,7 @@ public class DownloadManager {
                 .doOnNext(new Consumer<InputStream>() {
                     @Override
                     public void accept(InputStream inputStream) throws Exception {
-                        String filePath = Environment.getDataDirectory().getAbsolutePath()
-                                + File.separator + ROOT_DIR_FILENAME + File.separator + fileName;
-                        FileUtils.writeFileFromIS(filePath, inputStream);
+                        FileUtils.writeFileFromIS(fileName, inputStream);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())

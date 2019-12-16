@@ -482,21 +482,21 @@ public class FileUtils {
 
     /**
      * 写文件（把流写进文件）
-     * @param filePath
+     * @param fileName
      * @param is
      * @return
      */
-    public static boolean writeFileFromIS(String filePath, InputStream is) {
-        if(isFileExists(filePath)){
-            deleteFile(filePath);
-        }
+    public static boolean writeFileFromIS(String fileName, InputStream is) {
+        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator+"SimpleDownload";
         File dirFolder = new File(filePath);
         if (!dirFolder.exists()) {
             dirFolder.mkdirs();
         }
-        File file = new File(filePath);
+        File file = new File(filePath + File.separator + fileName);
         OutputStream os = null;
         try {
+            // 总是覆盖文件
+            file.createNewFile();
             os = new BufferedOutputStream(new FileOutputStream(file));
             byte data[] = new byte[8192];
             int len;

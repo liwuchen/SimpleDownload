@@ -1,22 +1,29 @@
 package com.lwc.simpledownload;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lwc.download.DownloadListener;
 import com.lwc.download.DownloadManager;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Download";
+    public static final int REQUEST_CODE = 100;
 
     private TextView tvProgress1;
     private TextView tvProgress2;
     private TextView tvProgress3;
     private DownloadManager downloadManager = DownloadManager.getInstance();
+    private String permissions[] = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     private String url1 = "https://codeload.github.com/square/okhttp/zip/master";
     private String fileName1 = "okhttp.zip";
@@ -34,6 +41,24 @@ public class MainActivity extends AppCompatActivity {
         tvProgress3 = findViewById(R.id.tvProgress3);
 
         setOnClickListeners();
+        requestPermissions();
+    }
+
+    private void requestPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(permissions, REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE ) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "没有权限保存文件", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
     }
 
     private void setOnClickListeners() {
