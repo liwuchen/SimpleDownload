@@ -31,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
     private String fileName2 = "picasso.zip";
     private String url3 = "https://codeload.github.com/square/retrofit/zip/master";
     private String fileName3 = "retrofit.zip";
+//    private String url1 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/8DE588DAEE2FE914.ccr";
+//    private String fileName1 = "1.file";
+//    private String url2 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/D030B9064D6442EB.ccr";
+//    private String fileName2 = "2.file";
+//    private String url3 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/D6A539AB16CD5B8B.ccr";
+//    private String fileName3 = "3.file";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onProgress(int progress) {
-            Log.d(TAG, "1 onProgress() called with: progress = [" + progress + "]");
-            tvProgress1.setText(""+progress);
+        public void onProgress(long downloaded, long total) {
+            Log.d(TAG, "1 onProgress() called with: downloaded = [" + downloaded + "], total = [" + total + "]");
+            tvProgress1.setText(getPercentString(downloaded, total));
         }
 
         @Override
@@ -185,9 +191,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onProgress(int progress) {
-            Log.d(TAG, "2 onProgress() called with: progress = [" + progress + "]");
-            tvProgress2.setText(""+progress);
+        public void onProgress(long downloaded, long total) {
+            Log.d(TAG, "2 onProgress() called with: downloaded = [" + downloaded + "], total = [" + total + "]");
+            tvProgress2.setText(getPercentString(downloaded, total));
         }
 
         @Override
@@ -209,9 +215,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onProgress(int progress) {
-            Log.d(TAG, "3 onProgress() called with: progress = [" + progress + "]");
-            tvProgress3.setText(""+progress);
+        public void onProgress(long downloaded, long total) {
+            Log.d(TAG, "3 onProgress() called with: downloaded = [" + downloaded + "], total = [" + total + "]");
+            tvProgress3.setText(getPercentString(downloaded, total));
         }
 
         @Override
@@ -224,4 +230,21 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "3 onFail() called with: errorInfo = [" + errorInfo + "]");
         }
     };
+
+    private String getPercentString(long val1, long val2) {
+        if (val2 > 0) {
+            int val = (int)(val1 / val2);
+            return val+"%";
+        } else {
+            if (val1 < 1024) {
+                return val1+"bytes";
+            } else if (val1 < 1024 * 1024) {
+                return (val1/1024)+"KB";
+            } else if (val1 < 1024 * 1024 * 1024) {
+                return (val1/1024/1024)+"MB";
+            }  else {
+                return (val1/1024/1024/1024)+"GB";
+            }
+        }
+    }
 }

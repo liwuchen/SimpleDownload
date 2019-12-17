@@ -45,7 +45,10 @@ public class DownloadProgressListener {
                             info.setState(DownState.FINISH);
                         } else {
                             if (info.getContentLength() > 0) {
-                                listener.onProgress((int) (info.getReadLength() * 100 / info.getContentLength()));
+                                listener.onProgress(info.getReadLength(), info.getContentLength());
+                            } else {
+                                // 获取不到文件总大小(contentLength==0)
+                                listener.onProgress(info.getReadLength(), -1);
                             }
                         }
                     }
