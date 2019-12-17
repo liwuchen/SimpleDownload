@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnRemove1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.stopDownload(url1);
+                downloadManager.removeDownload(url1);
             }
         });
 
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnRemove2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.stopDownload(url2);
+                downloadManager.removeDownload(url2);
             }
         });
 
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnRemove3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.stopDownload(url3);
+                downloadManager.removeDownload(url3);
             }
         });
     }

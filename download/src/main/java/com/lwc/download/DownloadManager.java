@@ -1,14 +1,8 @@
 package com.lwc.download;
 
-import android.os.Environment;
 import android.text.TextUtils;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,7 +31,6 @@ public class DownloadManager {
     private static final String TAG = "DownloadManager";
     private static final int DEFAULT_TIMEOUT = 40;
     private static final String BASE_URL = "http://www.baidu.com/";
-    public static final String ROOT_DIR_FILENAME = "download";
     /*正在下载的队列*/
     private HashMap<String, DownloadInfo> downloadMap;
 
@@ -62,6 +55,7 @@ public class DownloadManager {
     public void download(@NonNull String url, final String fileName, final DownloadListener listener) {
         DownloadInfo tempInfo = downloadMap.get(url);
         long start;
+        boolean newTask;
         DownloadService downloadService;
         if (tempInfo != null) {
             if (tempInfo.getState() == DownState.DOWNLOADING) {
@@ -71,10 +65,12 @@ public class DownloadManager {
                 //从暂停处继续下载
                 start = tempInfo.getReadLength();
                 downloadService = tempInfo.getService();
+                newTask = false;
             } else {
                 //出错，或者下载已完成
                 start = 0;
                 downloadService = tempInfo.getService();
+                newTask = true;
             }
         } else {
             //新的下载任务
@@ -100,8 +96,10 @@ public class DownloadManager {
             downloadService = retrofit.create(DownloadService.class);
             tempInfo.setService(downloadService);
             start = 0;
+            newTask = true;
         }
         final DownloadInfo downloadInfo = tempInfo;
+        final boolean newFile = newTask;
         downloadService
                 .rxDownload("bytes=" + start + "-", url)
                 .subscribeOn(Schedulers.io())
@@ -115,7 +113,7 @@ public class DownloadManager {
                 .doOnNext(new Consumer<InputStream>() {
                     @Override
                     public void accept(InputStream inputStream) throws Exception {
-                        FileUtils.writeFileFromIS(fileName, inputStream);
+                        FileUtils.writeFileFromIS(fileName, inputStream, newFile);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())

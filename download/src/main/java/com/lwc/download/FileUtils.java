@@ -486,7 +486,7 @@ public class FileUtils {
      * @param is
      * @return
      */
-    public static boolean writeFileFromIS(String fileName, InputStream is) {
+    public static boolean writeFileFromIS(String fileName, InputStream is, boolean newFile) {
         String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator+"SimpleDownload";
         File dirFolder = new File(filePath);
         if (!dirFolder.exists()) {
@@ -495,9 +495,15 @@ public class FileUtils {
         File file = new File(filePath + File.separator + fileName);
         OutputStream os = null;
         try {
-            // 总是覆盖文件
-            file.createNewFile();
-            os = new BufferedOutputStream(new FileOutputStream(file));
+            if (newFile) {
+                file.createNewFile();
+                os = new BufferedOutputStream(new FileOutputStream(file));
+            } else {
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+                os = new BufferedOutputStream(new FileOutputStream(file, true));
+            }
             byte data[] = new byte[8192];
             int len;
             while ((len = is.read(data, 0, 8192)) != -1) {
