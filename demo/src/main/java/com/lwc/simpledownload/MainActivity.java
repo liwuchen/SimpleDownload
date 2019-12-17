@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.lwc.download.DownloadListener;
 import com.lwc.download.DownloadManager;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Download";
@@ -24,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvProgress3;
     private DownloadManager downloadManager = DownloadManager.getInstance();
     private String permissions[] = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private final String FOLDER_NAME = "SimpleDownload";
+    private final String SAVE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + FOLDER_NAME;
 
 //    private String url1 = "https://codeload.github.com/square/okhttp/zip/master";
 //    private String fileName1 = "okhttp.zip";
@@ -73,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnStart1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.download(url1, fileName1, listener1);
+                downloadManager.download(url1, SAVE_PATH, fileName1, listener1);
             }
         });
 
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnStart2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.download(url2, fileName2, listener2);
+                downloadManager.download(url2, SAVE_PATH, fileName2, listener2);
             }
         });
 
@@ -133,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnStart3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.download(url3, fileName3, listener3);
+                downloadManager.download(url3, SAVE_PATH, fileName3, listener3);
             }
         });
 

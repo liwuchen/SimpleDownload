@@ -482,12 +482,12 @@ public class FileUtils {
 
     /**
      * 写文件（把流写进文件）
+     * @param filePath
      * @param fileName
      * @param is
      * @return
      */
-    public static boolean writeFileFromIS(String fileName, InputStream is, boolean newFile) {
-        String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator+"SimpleDownload";
+    public static boolean writeFileFromIS(String filePath, String fileName, InputStream is, boolean newFile) {
         File dirFolder = new File(filePath);
         if (!dirFolder.exists()) {
             dirFolder.mkdirs();

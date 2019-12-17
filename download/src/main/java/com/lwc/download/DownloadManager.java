@@ -52,7 +52,7 @@ public class DownloadManager {
         downloadMap = new HashMap<>();
     }
 
-    public void download(@NonNull String url, final String fileName, final DownloadListener listener) {
+    public void download(@NonNull String url, final String filePath, final String fileName, final DownloadListener listener) {
         DownloadInfo tempInfo = downloadMap.get(url);
         long start;
         boolean newTask;
@@ -76,6 +76,7 @@ public class DownloadManager {
             //新的下载任务
             tempInfo = new DownloadInfo();
             tempInfo.setUrl(url);
+            tempInfo.setSavePath(filePath);
             tempInfo.setFileName(fileName);
             tempInfo.setListener(listener);
 
@@ -113,7 +114,7 @@ public class DownloadManager {
                 .doOnNext(new Consumer<InputStream>() {
                     @Override
                     public void accept(InputStream inputStream) throws Exception {
-                        FileUtils.writeFileFromIS(fileName, inputStream, newFile);
+                        FileUtils.writeFileFromIS(filePath, fileName, inputStream, newFile);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -171,7 +172,7 @@ public class DownloadManager {
         if(downloadMap.containsKey(url)) {
             DownloadInfo downloadInfo = downloadMap.get(url);
             if (downloadInfo != null && downloadInfo.getState() == DownState.PAUSE) {
-                download(url, downloadInfo.getFileName(), downloadInfo.getListener());
+                download(url, downloadInfo.getSavePath(), downloadInfo.getFileName(), downloadInfo.getListener());
             }
         } else {
             // 没有此任务
