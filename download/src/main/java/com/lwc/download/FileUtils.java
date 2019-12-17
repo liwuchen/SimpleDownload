@@ -1,6 +1,7 @@
 package com.lwc.download;
 
 import android.os.Environment;
+import android.text.TextUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -529,6 +530,19 @@ public class FileUtils {
         }
     }
 
+    /**
+     * 删除文件
+     * @param srcFilePath
+     * @param fileName
+     * @return
+     */
+    public static boolean deleteFile(String srcFilePath, String fileName) {
+        if (TextUtils.isEmpty(srcFilePath) || TextUtils.isEmpty(fileName)) {
+            return false;
+        }
+        File file = new File(srcFilePath + File.separator + fileName);
+        return deleteFile(file.getPath());
+    }
 
     /**
      * 删除文件

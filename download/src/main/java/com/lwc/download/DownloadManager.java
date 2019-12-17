@@ -179,7 +179,7 @@ public class DownloadManager {
         }
     }
 
-    public void removeDownload(String url) {
+    public void removeDownload(String url, boolean deleteFile) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
@@ -193,6 +193,10 @@ public class DownloadManager {
                 disposable.dispose();
             }
             downloadMap.remove(url);
+
+            if (deleteFile && downloadInfo != null) {
+                FileUtils.deleteFile(downloadInfo.getSavePath(), downloadInfo.getFileName());
+            }
         } else {
             // 没有此任务
         }

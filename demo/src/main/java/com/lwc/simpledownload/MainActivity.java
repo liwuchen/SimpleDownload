@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView tvProgress1;
     private TextView tvProgress2;
-    private TextView tvProgress3;
     private DownloadManager downloadManager = DownloadManager.getInstance();
     private String permissions[] = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private final String FOLDER_NAME = "SimpleDownload";
@@ -49,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         tvProgress1 = findViewById(R.id.tvProgress1);
         tvProgress2 = findViewById(R.id.tvProgress2);
-        tvProgress3 = findViewById(R.id.tvProgress3);
 
         setOnClickListeners();
         requestPermissions();
@@ -99,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnRemove1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.removeDownload(url1);
+                downloadManager.removeDownload(url1, false);
             }
         });
 
@@ -129,37 +127,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnRemove2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.removeDownload(url2);
-            }
-        });
-
-
-        // 第三组
-        findViewById(R.id.btnStart3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                downloadManager.download(url3, SAVE_PATH, fileName3, listener3);
-            }
-        });
-
-        findViewById(R.id.btnStop3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                downloadManager.stopDownload(url3);
-            }
-        });
-
-        findViewById(R.id.btnContinue3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                downloadManager.continueDownload(url3);
-            }
-        });
-
-        findViewById(R.id.btnRemove3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                downloadManager.removeDownload(url3);
+                downloadManager.removeDownload(url2, true);
             }
         });
     }
@@ -209,30 +177,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onFail(String errorInfo) {
             Log.d(TAG, "2 onFail() called with: errorInfo = [" + errorInfo + "]");
-        }
-    };
-
-
-    DownloadListener listener3 = new DownloadListener() {
-        @Override
-        public void onStartDownload() {
-            Log.d(TAG, "3 onStartDownload() called");
-        }
-
-        @Override
-        public void onProgress(long downloaded, long total) {
-            Log.d(TAG, "3 onProgress() called with: downloaded = [" + downloaded + "], total = [" + total + "]");
-            tvProgress3.setText(getPercentString(downloaded, total));
-        }
-
-        @Override
-        public void onFinishDownload() {
-            Log.d(TAG, "3 onFinishDownload() called");
-        }
-
-        @Override
-        public void onFail(String errorInfo) {
-            Log.d(TAG, "3 onFail() called with: errorInfo = [" + errorInfo + "]");
         }
     };
 

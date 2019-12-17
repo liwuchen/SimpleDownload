@@ -23,7 +23,7 @@
             android:id="@+id/btnStart1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="下载1"/>
+            android:text="新下载1"/>
         <Button
             android:id="@+id/btnStop1"
             android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
             android:id="@+id/btnRemove1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="停止1"/>
+            android:text="终止1不删除文件"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="0dp"
@@ -56,7 +56,7 @@
             android:id="@+id/btnStart2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="下载2"/>
+            android:text="新下载2"/>
         <Button
             android:id="@+id/btnStop2"
             android:layout_width="wrap_content"
@@ -71,39 +71,6 @@
             android:id="@+id/btnRemove2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="停止2"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tvProgress3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="0"/>
-        <Button
-            android:id="@+id/btnStart3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="下载3"/>
-        <Button
-            android:id="@+id/btnStop3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="暂停3"/>
-        <Button
-            android:id="@+id/btnContinue3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="继续3"/>
-        <Button
-            android:id="@+id/btnRemove3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="停止3"/>
+            android:text="终止2并删除文件"/>
     </LinearLayout>
 </LinearLayout>
