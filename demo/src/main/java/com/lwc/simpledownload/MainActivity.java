@@ -25,18 +25,18 @@ public class MainActivity extends AppCompatActivity {
     private DownloadManager downloadManager = DownloadManager.getInstance();
     private String permissions[] = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-    private String url1 = "https://codeload.github.com/square/okhttp/zip/master";
-    private String fileName1 = "okhttp.zip";
-    private String url2 = "https://codeload.github.com/square/picasso/zip/master";
-    private String fileName2 = "picasso.zip";
-    private String url3 = "https://codeload.github.com/square/retrofit/zip/master";
-    private String fileName3 = "retrofit.zip";
-//    private String url1 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/8DE588DAEE2FE914.ccr";
-//    private String fileName1 = "1.file";
-//    private String url2 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/D030B9064D6442EB.ccr";
-//    private String fileName2 = "2.file";
-//    private String url3 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/D6A539AB16CD5B8B.ccr";
-//    private String fileName3 = "3.file";
+//    private String url1 = "https://codeload.github.com/square/okhttp/zip/master";
+//    private String fileName1 = "okhttp.zip";
+//    private String url2 = "https://codeload.github.com/square/picasso/zip/master";
+//    private String fileName2 = "picasso.zip";
+//    private String url3 = "https://codeload.github.com/square/retrofit/zip/master";
+//    private String fileName3 = "retrofit.zip";
+    private String url1 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/8DE588DAEE2FE914.ccr";
+    private String fileName1 = "1.file";
+    private String url2 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/D030B9064D6442EB.ccr";
+    private String fileName2 = "2.file";
+    private String url3 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/D6A539AB16CD5B8B.ccr";
+    private String fileName3 = "3.file";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String getPercentString(long val1, long val2) {
         if (val2 > 0) {
-            int val = (int)(val1 / val2);
+            int val = (int)(val1*100/val2);
             return val+"%";
         } else {
             if (val1 < 1024) {
