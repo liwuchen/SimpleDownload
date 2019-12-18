@@ -138,6 +138,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        public void onPauseDownload() {
+            Toast.makeText(MainActivity.this, "暂停1下载", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancelDownload() {
+            Toast.makeText(MainActivity.this, "取消1下载", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
         public void onFinishDownload() {
             Log.d(TAG, "1 onFinishDownload() called");
         }
@@ -159,6 +169,16 @@ public class MainActivity extends AppCompatActivity {
         public void onProgress(long downloaded, long total) {
             Log.d(TAG, "2 onProgress() called with: downloaded = [" + downloaded + "], total = [" + total + "]");
             tvProgress2.setText(getPercentString(downloaded, total));
+        }
+
+        @Override
+        public void onPauseDownload() {
+            Toast.makeText(MainActivity.this, "暂停2下载", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancelDownload() {
+            Toast.makeText(MainActivity.this, "取消2下载", Toast.LENGTH_SHORT).show();
         }
 
         @Override

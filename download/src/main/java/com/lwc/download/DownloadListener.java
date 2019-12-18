@@ -13,6 +13,10 @@ public interface DownloadListener {
 
     void onProgress(long downloaded, long total);
 
+    void onPauseDownload();
+
+    void onCancelDownload();
+
     void onFinishDownload();
 
     void onFail(String errorInfo);

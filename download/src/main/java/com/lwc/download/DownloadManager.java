@@ -171,6 +171,7 @@ public class DownloadManager {
             if (disposable != null && !disposable.isDisposed()) {
                 disposable.dispose();
                 downloadInfo.setState(DownState.PAUSE);
+                downloadInfo.getListener().onPauseDownload();
             }
         }
     }
@@ -210,6 +211,7 @@ public class DownloadManager {
             }
             if (disposable != null && !disposable.isDisposed()) {
                 disposable.dispose();
+                downloadInfo.getListener().onCancelDownload();
             }
             downloadMap.remove(url);
 
