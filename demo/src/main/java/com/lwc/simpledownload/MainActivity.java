@@ -29,18 +29,10 @@ public class MainActivity extends AppCompatActivity {
     private final String FOLDER_NAME = "SimpleDownload";
     private final String SAVE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + FOLDER_NAME;
 
-//    private String url1 = "https://codeload.github.com/square/okhttp/zip/master";
-//    private String fileName1 = "okhttp.zip";
-//    private String url2 = "https://codeload.github.com/square/picasso/zip/master";
-//    private String fileName2 = "picasso.zip";
-//    private String url3 = "https://codeload.github.com/square/retrofit/zip/master";
-//    private String fileName3 = "retrofit.zip";
-    private String url1 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/8DE588DAEE2FE914.ccr";
-    private String fileName1 = "1.file";
-    private String url2 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/D030B9064D6442EB.ccr";
-    private String fileName2 = "2.file";
-    private String url3 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/D6A539AB16CD5B8B.ccr";
-    private String fileName3 = "3.file";
+    private final String url1 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/8DE588DAEE2FE914.ccr";
+    private final String fileName1 = "1.file";
+    private final String url2 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/D030B9064D6442EB.ccr";
+    private final String fileName2 = "2.file";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnStop1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.stopDownload(url1);
+                downloadManager.pauseDownload(url1);
             }
         });
 
@@ -97,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnRemove1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.removeDownload(url1, false);
+                downloadManager.cancelDownload(url1, false);
             }
         });
 
@@ -113,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnStop2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.stopDownload(url2);
+                downloadManager.pauseDownload(url2);
             }
         });
 
@@ -127,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnRemove2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.removeDownload(url2, true);
+                downloadManager.cancelDownload(url2, true);
             }
         });
     }

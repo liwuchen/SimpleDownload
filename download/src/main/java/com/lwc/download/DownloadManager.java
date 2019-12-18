@@ -34,7 +34,6 @@ public class DownloadManager {
     /*正在下载的队列*/
     private HashMap<String, DownloadInfo> downloadMap;
 
-
     private volatile static DownloadManager INSTANCE;
 
     public static DownloadManager getInstance() {
@@ -52,6 +51,13 @@ public class DownloadManager {
         downloadMap = new HashMap<>();
     }
 
+    /**
+     * 下载文件
+     * @param url 文件下载地址
+     * @param filePath 文件保存路径（不以“/”结尾）
+     * @param fileName 文件保存名称
+     * @param listener 下载监听
+     */
     public void download(@NonNull String url, final String filePath, final String fileName, final DownloadListener listener) {
         DownloadInfo tempInfo = downloadMap.get(url);
         long start;
@@ -148,7 +154,11 @@ public class DownloadManager {
         downloadMap.put(url, downloadInfo);
     }
 
-    public void stopDownload(String url) {
+    /**
+     * 暂停下载
+     * @param url 文件下载地址
+     */
+    public void pauseDownload(String url) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
@@ -165,6 +175,10 @@ public class DownloadManager {
         }
     }
 
+    /**
+     * 继续下载
+     * @param url 文件下载地址
+     */
     public void continueDownload(String url) {
         if (TextUtils.isEmpty(url)) {
             return;
@@ -179,7 +193,12 @@ public class DownloadManager {
         }
     }
 
-    public void removeDownload(String url, boolean deleteFile) {
+    /**
+     * 取消下载
+     * @param url 文件下载地址
+     * @param deleteFile 是否删除已下载的文件
+     */
+    public void cancelDownload(String url, boolean deleteFile) {
         if (TextUtils.isEmpty(url)) {
             return;
         }
