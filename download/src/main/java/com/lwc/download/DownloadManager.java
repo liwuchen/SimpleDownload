@@ -93,12 +93,10 @@ public class DownloadManager {
                     .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                     .build();
 
-            ExecutorService executorService = Executors.newFixedThreadPool(1);
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(httpClient)
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .callbackExecutor(executorService) //设置CallBack回调在子线程进行
                     .build();
             downloadService = retrofit.create(DownloadService.class);
             tempInfo.setService(downloadService);
