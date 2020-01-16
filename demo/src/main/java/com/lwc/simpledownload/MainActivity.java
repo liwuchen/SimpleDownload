@@ -7,7 +7,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private DownloadManager downloadManager = DownloadManager.getInstance();
     private String permissions[] = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private final String FOLDER_NAME = "SimpleDownload";
-    private final String SAVE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + FOLDER_NAME;
+    private String savePath;
 
     private final String url1 = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/8DE588DAEE2FE914.ccr";
     private final String fileName1 = "1.file";
@@ -43,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         setOnClickListeners();
         requestPermissions();
+        savePath = getApplication().getExternalCacheDir() + File.separator + FOLDER_NAME;
     }
 
     private void requestPermissions() {
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnStart1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.download(url1, SAVE_PATH, fileName1, listener1);
+                downloadManager.download(url1, savePath, fileName1, listener1);
             }
         });
 
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnStart2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.download(url2, SAVE_PATH, fileName2, listener2);
+                downloadManager.download(url2, savePath, fileName2, listener2);
             }
         });
 
@@ -148,8 +148,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFinishDownload() {
-            Log.d(TAG, "1 onFinishDownload() called");
+        public void onFinishDownload(String file) {
+            Log.d(TAG, "1 onFinishDownload() called:" + file);
         }
 
         @Override
@@ -182,8 +182,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFinishDownload() {
-            Log.d(TAG, "2 onFinishDownload() called");
+        public void onFinishDownload(String file) {
+            Log.d(TAG, "2 onFinishDownload() called:" + file);
         }
 
         @Override

@@ -17,7 +17,7 @@ public interface DownloadListener {
 
     void onCancelDownload();
 
-    void onFinishDownload();
+    void onFinishDownload(String savedFile);
 
     void onFail(String errorInfo);
 }

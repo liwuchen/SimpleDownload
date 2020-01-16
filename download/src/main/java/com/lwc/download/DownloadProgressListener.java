@@ -1,5 +1,7 @@
 package com.lwc.download;
 
+import java.io.File;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -41,7 +43,7 @@ public class DownloadProgressListener {
                     @Override
                     public void accept(Integer integer) {
                         if (done) {
-                            listener.onFinishDownload();
+                            listener.onFinishDownload(info.getSavePath() + File.separator + info.getFileName());
                             info.setState(DownState.FINISH);
                         } else {
                             if (info.getContentLength() > 0) {
