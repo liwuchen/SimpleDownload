@@ -33,7 +33,7 @@ allprojects {
 ```
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api 'com.github.liwuchen:SimpleDownload:1.1.0' 	// 添加这行
+    api 'com.github.liwuchen:SimpleDownload:1.1.2' 	// 添加这行
 }
 ```
 请使用最新版本。
