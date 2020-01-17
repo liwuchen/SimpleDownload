@@ -54,7 +54,7 @@ private final String FOLDER_NAME = "SimpleDownload";
 // 文件保存路径
 private final String SAVE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + FOLDER_NAME;
 // 文件下载地址
-private final String url = "http://ccr.csslcloud.net/5D2636511DBBCADD/BBD5D1D6504FF2AD9C33DC5901307461/8DE588DAEE2FE914.ccr";
+private final String url = "文件下载地址";
 // 保存文件名
 private final String fileName = "1.file";
 ```
@@ -75,7 +75,7 @@ DownloadListener listener = new DownloadListener() {
     public void onCancelDownload() {}
 
     @Override
-    public void onFinishDownload() {}
+    public void onFinishDownload(String savedFile) {}
 
     @Override
     public void onFail(String errorInfo) {}
