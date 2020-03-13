@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnStart1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.download(url1, savePath, fileName1, listener1);
+                downloadManager.download(MainActivity.this, url1, savePath, fileName1, listener1);
             }
         });
 
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnStart2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.download(url2, savePath, fileName2, listener2);
+                downloadManager.download(MainActivity.this, url2, savePath, fileName2, listener2);
             }
         });
 

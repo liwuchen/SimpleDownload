@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 12
+        versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -39,4 +39,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.13'
     implementation 'org.litepal.android:java:3.0.0'
+    // 申请权限所用
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 }
