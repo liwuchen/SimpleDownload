@@ -3,6 +3,7 @@ package com.lwc.download;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -197,7 +198,15 @@ public class DownloadManager {
             if (disposable != null && !disposable.isDisposed()) {
                 disposable.dispose();
                 downloadInfo.setState(DownState.PAUSE);
-                downloadInfo.getListener().onPauseDownload();
+
+                //延迟回调，解决disposable.dispose()调用后任务会继续执行若干时间的问题
+                final DownloadListener listener = downloadInfo.getListener();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onPauseDownload();
+                    }
+                }, 1000);
             }
         }
     }
@@ -237,7 +246,16 @@ public class DownloadManager {
             }
             if (disposable != null && !disposable.isDisposed()) {
                 disposable.dispose();
-                downloadInfo.getListener().onCancelDownload();
+
+                //延迟回调，解决disposable.dispose()调用后任务会继续执行若干时间的问题
+                final DownloadListener listener = downloadInfo.getListener();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onCancelDownload();
+                    }
+                }, 1000);
+
             }
             downloadMap.remove(url);
 
