@@ -42,7 +42,7 @@ public class DownloadManager {
     private static final int DEFAULT_TIMEOUT = 40;
     private static final String BASE_URL = "http://www.baidu.com/";
     /*正在下载的队列*/
-    private HashMap<String, DownloadInfo> downloadMap;
+    private static HashMap<String, DownloadInfo> downloadMap;
 
     private volatile static DownloadManager INSTANCE;
 
@@ -223,6 +223,24 @@ public class DownloadManager {
             DownloadInfo downloadInfo = downloadMap.get(url);
             if (downloadInfo != null && downloadInfo.getState() == DownState.PAUSE) {
                 startDownload(url, downloadInfo.getSavePath(), downloadInfo.getFileName(), downloadInfo.getListener());
+            }
+        } else {
+            // 没有此任务
+        }
+    }
+
+    /**
+     * 继续下载
+     * @param url 文件下载地址
+     */
+    public void continueDownload(final String url, final DownloadListener listener) {
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+        if(downloadMap.containsKey(url)) {
+            DownloadInfo downloadInfo = downloadMap.get(url);
+            if (downloadInfo != null && downloadInfo.getState() == DownState.PAUSE) {
+                startDownload(url, downloadInfo.getSavePath(), downloadInfo.getFileName(), listener);
             }
         } else {
             // 没有此任务

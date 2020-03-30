@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Download";
     public static final int REQUEST_CODE = 100;
 
-    private TextView tvProgress1;
-    private TextView tvProgress2;
+    private static TextView tvProgress1;
+    private static TextView tvProgress2;
     private DownloadManager downloadManager = DownloadManager.getInstance();
     private String permissions[] = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private final String FOLDER_NAME = "SimpleDownload";
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 downloadManager.continueDownload(url1);
+//                downloadManager.continueDownload(url1, listener1);
             }
         });
 
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnContinue2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.continueDownload(url2);
+                downloadManager.continueDownload(url2, listener2);
             }
         });
 
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    DownloadListener listener1 = new DownloadListener() {
+    static DownloadListener listener1 = new DownloadListener() {
         @Override
         public void onStartDownload() {
             Log.d(TAG, "1 onStartDownload() called");
@@ -139,12 +140,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPauseDownload() {
-            Toast.makeText(MainActivity.this, "暂停1下载", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "1 onPauseDownload() called");
         }
 
         @Override
         public void onCancelDownload() {
-            Toast.makeText(MainActivity.this, "取消1下载", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "1 onCancelDownload() called");
         }
 
         @Override
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    DownloadListener listener2 = new DownloadListener() {
+    static DownloadListener listener2 = new DownloadListener() {
         @Override
         public void onStartDownload() {
             Log.d(TAG, "2 onStartDownload() called");
@@ -173,12 +174,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPauseDownload() {
-            Toast.makeText(MainActivity.this, "暂停2下载", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "2 onPauseDownload() called");
         }
 
         @Override
         public void onCancelDownload() {
-            Toast.makeText(MainActivity.this, "取消2下载", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "2 onCancelDownload() called");
         }
 
         @Override
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private String getPercentString(long val1, long val2) {
+    private static String getPercentString(long val1, long val2) {
         if (val2 > 0) {
             int val = (int)(val1*100/val2);
             return val+"%";
@@ -212,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        downloadManager.pauseDownload(url1);
-        downloadManager.pauseDownload(url2);
+//        downloadManager.pauseDownload(url1);
+//        downloadManager.pauseDownload(url2);
     }
 }
