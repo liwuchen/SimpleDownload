@@ -33,7 +33,7 @@ allprojects {
 ```
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api 'com.github.liwuchen:SimpleDownload:1.1.2' 	// 添加这行
+    api 'com.github.liwuchen:SimpleDownload:1.4.0' 	// 添加这行
 }
 ```
 请使用最新版本。
@@ -61,31 +61,49 @@ private final String fileName = "1.file";
 
 ```java
 // 定义下载回调
-DownloadListener listener = new DownloadListener() {
-    @Override
-    public void onStartDownload() {}
-    
-    @Override
-    public void onProgress(long downloaded, long total) {}
+  DownloadListener listener = new DownloadListener() {
+        @Override
+        public void onStartDownload(TextView textView) {
+            Log.d(TAG, "1 onStartDownload() called");
+        }
 
-    @Override
-    public void onPauseDownload() {}
+        @Override
+        public void onProgress(long downloaded, long total, TextView textView) {
+            Log.d(TAG, "1 onProgress() called with: downloaded = [" + downloaded + "], total = [" + total + "]");
+            textView.setText(getPercentString(downloaded, total));
+        }
 
-    @Override
-    public void onCancelDownload() {}
+        @Override
+        public void onPauseDownload(TextView textView) {
+            Log.d(TAG, "1 onPauseDownload() called");
+            textView.setText("暂停");
+        }
 
-    @Override
-    public void onFinishDownload(String savedFile) {}
+        @Override
+        public void onCancelDownload(TextView textView) {
+            Log.d(TAG, "1 onCancelDownload() called");
+            textView.setText("已取消");
+        }
 
-    @Override
-    public void onFail(String errorInfo) {}
-};
+        @Override
+        public void onFinishDownload(String file, TextView textView) {
+            Log.d(TAG, "1 onFinishDownload() called:" + file);
+            textView.setText("已完成");
+        }
+
+        @Override
+        public void onFail(String errorInfo, TextView textView) {
+            Log.d(TAG, "1 onFail() called with: errorInfo = [" + errorInfo + "]");
+            textView.setText("下载出错");
+        }
+    };
 ```
 
 ```java
 DownloadManager downloadManager = DownloadManager.getInstance();
 // 开始下载
-downloadManager.download(url, SAVE_PATH, fileName, listener);
+TextView tvStatus = findViewById(R.id.tvStatus);
+downloadManager.download(url, SAVE_PATH, fileName, tvStatus, listener);
 // 暂停下载
 downloadManager.pauseDownload(url);
 // 继续下载
