@@ -1,5 +1,7 @@
 package com.lwc.download;
 
+import android.widget.TextView;
+
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -9,7 +11,6 @@ import io.reactivex.disposables.Disposable;
  * @Author: liwuchen
  * @CreateDate: 2019/10/18
  */
-
 public class DownloadInfo {
     /* 文件存储名 */
     private String fileName;
@@ -29,6 +30,16 @@ public class DownloadInfo {
     private DownState state;
     /* 下载回调 */
     private DownloadListener listener;
+    /* 可显示下载状态的TextView */
+    private TextView stateTextView;
+
+    public TextView getStateTextView() {
+        return stateTextView;
+    }
+
+    public void setStateTextView(TextView stateTextView) {
+        this.stateTextView = stateTextView;
+    }
 
     public String getFileName() {
         return fileName;
@@ -114,6 +125,7 @@ public class DownloadInfo {
                 ", disposable=" + disposable +
                 ", state=" + state +
                 ", listener=" + listener +
+                ", stateTextView=" + stateTextView +
                 '}';
     }
 }

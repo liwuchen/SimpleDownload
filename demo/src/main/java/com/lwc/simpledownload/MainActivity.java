@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lwc.download.DownState;
 import com.lwc.download.DownloadListener;
 import com.lwc.download.DownloadManager;
 
@@ -43,6 +44,18 @@ public class MainActivity extends AppCompatActivity {
         setOnClickListeners();
         requestPermissions();
         savePath = getApplication().getExternalCacheDir() + File.separator + FOLDER_NAME;
+
+        restoreDownState(url1, tvProgress1);
+        restoreDownState(url2, tvProgress2);
+    }
+
+    private void restoreDownState(String url, TextView textView) {
+        if (DownloadManager.getInstance().getTaskState(url) == DownState.DOWNLOADING) {
+            DownloadManager.getInstance().updateStatusTextView(url, textView);
+        } else if (DownloadManager.getInstance().getTaskState(url) == DownState.PAUSE) {
+            DownloadManager.getInstance().updateStatusTextView(url, textView);
+            textView.setText("暂停");
+        }
     }
 
     private void requestPermissions() {
@@ -68,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnStart1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadManager.download(MainActivity.this, url1, savePath, fileName1, listener1);
+                downloadManager.download(MainActivity.this, url1, savePath, fileName1, tvProgress1, listener1);
             }
         });
 
@@ -128,67 +141,71 @@ public class MainActivity extends AppCompatActivity {
 
     static DownloadListener listener1 = new DownloadListener() {
         @Override
-        public void onStartDownload() {
+        public void onStartDownload(TextView textView) {
             Log.d(TAG, "1 onStartDownload() called");
         }
 
         @Override
-        public void onProgress(long downloaded, long total) {
+        public void onProgress(long downloaded, long total, TextView textView) {
             Log.d(TAG, "1 onProgress() called with: downloaded = [" + downloaded + "], total = [" + total + "]");
-            tvProgress1.setText(getPercentString(downloaded, total));
+            textView.setText(getPercentString(downloaded, total));
         }
 
         @Override
-        public void onPauseDownload() {
+        public void onPauseDownload(TextView textView) {
             Log.d(TAG, "1 onPauseDownload() called");
+            textView.setText("暂停");
         }
 
         @Override
-        public void onCancelDownload() {
+        public void onCancelDownload(TextView textView) {
             Log.d(TAG, "1 onCancelDownload() called");
+            textView.setText("已取消");
         }
 
         @Override
-        public void onFinishDownload(String file) {
+        public void onFinishDownload(String file, TextView textView) {
             Log.d(TAG, "1 onFinishDownload() called:" + file);
+            textView.setText("已完成");
         }
 
         @Override
-        public void onFail(String errorInfo) {
+        public void onFail(String errorInfo, TextView textView) {
             Log.d(TAG, "1 onFail() called with: errorInfo = [" + errorInfo + "]");
+            textView.setText("下载出错");
         }
     };
 
 
     static DownloadListener listener2 = new DownloadListener() {
         @Override
-        public void onStartDownload() {
+        public void onStartDownload(TextView textView) {
             Log.d(TAG, "2 onStartDownload() called");
         }
 
         @Override
-        public void onProgress(long downloaded, long total) {
+        public void onProgress(long downloaded, long total, TextView textView) {
             Log.d(TAG, "2 onProgress() called with: downloaded = [" + downloaded + "], total = [" + total + "]");
             tvProgress2.setText(getPercentString(downloaded, total));
         }
 
         @Override
-        public void onPauseDownload() {
+        public void onPauseDownload(TextView textView) {
             Log.d(TAG, "2 onPauseDownload() called");
         }
 
         @Override
-        public void onCancelDownload() {
+        public void onCancelDownload(TextView textView) {
             Log.d(TAG, "2 onCancelDownload() called");
         }
 
         @Override
-        public void onFinishDownload(String file) {
+        public void onFinishDownload(String file, TextView textView) {
             Log.d(TAG, "2 onFinishDownload() called:" + file);
         }
 
         @Override
-        public void onFail(String errorInfo) {
+        public void onFail(String errorInfo, TextView textView) {
             Log.d(TAG, "2 onFail() called with: errorInfo = [" + errorInfo + "]");
         }
     };

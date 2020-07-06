@@ -43,14 +43,14 @@ public class DownloadProgressListener {
                     @Override
                     public void accept(Integer integer) {
                         if (done) {
-                            listener.onFinishDownload(info.getSavePath() + File.separator + info.getFileName());
+                            listener.onFinishDownload(info.getSavePath() + File.separator + info.getFileName(), info.getStateTextView());
                             info.setState(DownState.FINISH);
                         } else {
                             if (info.getContentLength() > 0) {
-                                listener.onProgress(info.getReadLength(), info.getContentLength());
+                                listener.onProgress(info.getReadLength(), info.getContentLength(), info.getStateTextView());
                             } else {
                                 // 获取不到文件总大小(contentLength==0)
-                                listener.onProgress(info.getReadLength(), -1);
+                                listener.onProgress(info.getReadLength(), -1, info.getStateTextView());
                             }
                         }
                     }

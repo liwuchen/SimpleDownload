@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
  * @CreateDate: 2019/10/12
  */
 public class DownloadManager {
+
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 99;
     private static final String TAG = "DownloadManager";
     private static final int DEFAULT_TIMEOUT = 40;
@@ -64,17 +66,31 @@ public class DownloadManager {
     /**
      * 判断有无存储权限，没有的话就申请权限
      * @param context
-     * @param url
-     * @param filePath
-     * @param fileName
-     * @param listener
+     * @param url 文件下载地址。例：https://xtknowledgeoss.xuetian.cn/multimedia_knowledge/R16f4601f703000n_crm测试账号.xlsx
+     * @param filePath 文件保存路径（不以“/”结尾）。例：/storage/emulated/0/xt_smart/课程资料
+     * @param fileName 文件保存名称。例：资料测试单独1.xlsx
+     * @param listener 下载监听
      */
     public void download(Activity context, @NonNull String url, final String filePath, final String fileName, final DownloadListener listener) {
+        download(context, url, filePath, fileName, null, listener);
+    }
+
+
+    /**
+     * 判断有无存储权限，没有的话就申请权限
+     * @param context
+     * @param url 文件下载地址。例：https://xtknowledgeoss.xuetian.cn/multimedia_knowledge/R16f4601f703000n_crm测试账号.xlsx
+     * @param filePath 文件保存路径（不以“/”结尾）。例：/storage/emulated/0/xt_smart/课程资料
+     * @param fileName 文件保存名称。例：资料测试单独1.xlsx
+     * @param textView 可显示下载状态的TextView
+     * @param listener 下载监听
+     */
+    public void download(Activity context, @NonNull String url, final String filePath, final String fileName, TextView textView, final DownloadListener listener) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(context, "请先获取存储权限，然后点击下载", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "请先获取存储权限，然后点击下载", Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
         } else {
-            startDownload(url, filePath, fileName, listener);
+            startDownload(url, filePath, fileName, textView, listener);
         }
     }
 
@@ -83,14 +99,16 @@ public class DownloadManager {
      * @param url 文件下载地址
      * @param filePath 文件保存路径（不以“/”结尾）
      * @param fileName 文件保存名称
+     * @param textView 可显示下载状态的TextView
      * @param listener 下载监听
      */
-    private void startDownload(@NonNull String url, final String filePath, final String fileName, final DownloadListener listener) {
+    private void startDownload(@NonNull String url, final String filePath, final String fileName, TextView textView, final DownloadListener listener) {
         DownloadInfo tempInfo = downloadMap.get(url);
         long start;
         boolean newTask;
         DownloadService downloadService;
         if (tempInfo != null) {
+            tempInfo.setStateTextView(textView);
             if (tempInfo.getState() == DownState.DOWNLOADING) {
                 //正在下载则不处理
                 return;
@@ -112,6 +130,7 @@ public class DownloadManager {
             tempInfo.setSavePath(filePath);
             tempInfo.setFileName(fileName);
             tempInfo.setListener(listener);
+            tempInfo.setStateTextView(textView);
 
             DownloadInterceptor interceptor = new DownloadInterceptor(new DownloadProgressListener(tempInfo, listener));
             OkHttpClient httpClient = new OkHttpClient.Builder()
@@ -155,7 +174,7 @@ public class DownloadManager {
                     @Override
                     public void onSubscribe(Disposable d) {
                         if (listener != null) {
-                            listener.onStartDownload();
+                            listener.onStartDownload(downloadInfo.getStateTextView());
                         }
                         downloadInfo.setDisposable(d);
                     }
@@ -167,7 +186,7 @@ public class DownloadManager {
                     @Override
                     public void onError(Throwable e) {
                         if (listener != null) {
-                            listener.onFail(e.getMessage());
+                            listener.onFail(e.getMessage(), downloadInfo.getStateTextView());
                             downloadInfo.setState(DownState.ERROR);
                         }
                     }
@@ -181,6 +200,14 @@ public class DownloadManager {
         downloadMap.put(url, downloadInfo);
     }
 
+    public void pauseAllDownload(){
+        if(downloadMap != null){
+            for (HashMap.Entry<String, DownloadInfo> entry : downloadMap.entrySet()) {
+                pauseDownload(entry.getKey());
+            }
+        }
+    }
+
     /**
      * 暂停下载
      * @param url 文件下载地址
@@ -190,7 +217,7 @@ public class DownloadManager {
             return;
         }
         if(downloadMap.containsKey(url)) {
-            DownloadInfo downloadInfo = downloadMap.get(url);
+            final DownloadInfo downloadInfo = downloadMap.get(url);
             Disposable disposable = null;
             if (downloadInfo != null) {
                 disposable = downloadInfo.getDisposable();
@@ -204,7 +231,7 @@ public class DownloadManager {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        listener.onPauseDownload();
+                        listener.onPauseDownload(downloadInfo.getStateTextView());
                     }
                 }, 1000);
             }
@@ -222,7 +249,7 @@ public class DownloadManager {
         if(downloadMap.containsKey(url)) {
             DownloadInfo downloadInfo = downloadMap.get(url);
             if (downloadInfo != null && downloadInfo.getState() == DownState.PAUSE) {
-                startDownload(url, downloadInfo.getSavePath(), downloadInfo.getFileName(), downloadInfo.getListener());
+                startDownload(url, downloadInfo.getSavePath(), downloadInfo.getFileName(), downloadInfo.getStateTextView(), downloadInfo.getListener());
             }
         } else {
             // 没有此任务
@@ -240,7 +267,27 @@ public class DownloadManager {
         if(downloadMap.containsKey(url)) {
             DownloadInfo downloadInfo = downloadMap.get(url);
             if (downloadInfo != null && downloadInfo.getState() == DownState.PAUSE) {
-                startDownload(url, downloadInfo.getSavePath(), downloadInfo.getFileName(), listener);
+                startDownload(url, downloadInfo.getSavePath(), downloadInfo.getFileName(), downloadInfo.getStateTextView(), listener);
+            }
+        } else {
+            // 没有此任务
+        }
+    }
+
+    /**
+     * 继续下载
+     * @param url 文件下载地址
+     * @param textView
+     * @param listener
+     */
+    public void continueDownload(final String url, final TextView textView, final DownloadListener listener) {
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+        if(downloadMap.containsKey(url)) {
+            DownloadInfo downloadInfo = downloadMap.get(url);
+            if (downloadInfo != null && downloadInfo.getState() == DownState.PAUSE) {
+                startDownload(url, downloadInfo.getSavePath(), downloadInfo.getFileName(), textView, listener);
             }
         } else {
             // 没有此任务
@@ -257,7 +304,7 @@ public class DownloadManager {
             return;
         }
         if(downloadMap.containsKey(url)) {
-            DownloadInfo downloadInfo = downloadMap.get(url);
+            final DownloadInfo downloadInfo = downloadMap.get(url);
             Disposable disposable = null;
             if (downloadInfo != null) {
                 disposable = downloadInfo.getDisposable();
@@ -270,10 +317,9 @@ public class DownloadManager {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        listener.onCancelDownload();
+                        listener.onCancelDownload(downloadInfo.getStateTextView());
                     }
                 }, 1000);
-
             }
             downloadMap.remove(url);
 
@@ -284,4 +330,42 @@ public class DownloadManager {
             // 没有此任务
         }
     }
+
+    /**
+     * 获取下载任务的状态
+     * @param url
+     * @return
+     */
+    public DownState getTaskState(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return DownState.DEFAULT;
+        }
+        if(downloadMap.containsKey(url)) {
+            DownloadInfo downloadInfo = downloadMap.get(url);
+            if (downloadInfo != null) {
+                return downloadInfo.getState();
+            }
+        }
+        return DownState.DEFAULT;
+    }
+
+
+    /**
+     * 更新显示状态的TextView
+     * @param url
+     * @return
+     */
+    public void updateStatusTextView(String url, TextView textView) {
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+        if(downloadMap.containsKey(url)) {
+            DownloadInfo downloadInfo = downloadMap.get(url);
+            if (downloadInfo != null) {
+                downloadInfo.setStateTextView(textView);
+            }
+        }
+    }
+
+
 }

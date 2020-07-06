@@ -8,6 +8,7 @@ package com.lwc.download;
  * @CreateDate: 2019/10/15
  */
 public enum  DownState {
+    DEFAULT(0),
     DOWNLOADING(1),
     PAUSE(2),
     ERROR(3),

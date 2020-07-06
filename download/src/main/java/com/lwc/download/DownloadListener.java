@@ -1,5 +1,7 @@
 package com.lwc.download;
 
+import android.widget.TextView;
+
 /**
  * @Package: com.lwc.download
  * @ClassName: DownloadListener
@@ -9,15 +11,15 @@ package com.lwc.download;
  */
 public interface DownloadListener {
 
-    void onStartDownload();
+    void onStartDownload(TextView textView);
 
-    void onProgress(long downloaded, long total);
+    void onProgress(long downloaded, long total, TextView textView);
 
-    void onPauseDownload();
+    void onPauseDownload(TextView textView);
 
-    void onCancelDownload();
+    void onCancelDownload(TextView textView);
 
-    void onFinishDownload(String savedFile);
+    void onFinishDownload(String savedFile, TextView textView);
 
-    void onFail(String errorInfo);
+    void onFail(String errorInfo, TextView textView);
 }
