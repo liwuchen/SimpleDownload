@@ -12,7 +12,7 @@
 </font>
 
 ### 二、最终效果图
-<img src=https://img-blog.csdnimg.cn/20191218203757945.gif width=200></img>
+<img src=https://img-blog.csdnimg.cn/20200706105126578.gif width=250></img>
 
 ### 三、使用方法
 如果想在Android Studio项目中使用本框架，下面是使用步骤：
